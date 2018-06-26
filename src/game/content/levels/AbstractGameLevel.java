@@ -30,30 +30,32 @@ public abstract class AbstractGameLevel implements IGameScene, IUpdatable, IRend
     @Override
     public void render () {       
         
-        int sx = offset.getX() / GameScreenSettings.getGameTileSize();
-        int sy = offset.getY() / GameScreenSettings.getGameTileSize();
+        int sxt = offset.getX() / GameScreenSettings.getGameTileSize();
+        int syt = offset.getY() / GameScreenSettings.getGameTileSize();
         
-        int mx = sx + GameWindowManager.instance.getWindow().getSize().width / GameScreenSettings.getGameTileSize();
-        int my = sy + GameWindowManager.instance.getWindow().getSize().height / GameScreenSettings.getGameTileSize();
+        int mxt = sxt + GameWindowManager.instance.getWindow().getSize().width / GameScreenSettings.getGameTileSize();
+        int myt = syt + GameWindowManager.instance.getWindow().getSize().height / GameScreenSettings.getGameTileSize();
         
-        int sxOffset = offset.getX() % GameScreenSettings.getGameTileSize();
-        int syOffset = offset.getY() % GameScreenSettings.getGameTileSize();
+        int sxpOffset = offset.getX() % GameScreenSettings.getGameTileSize();
+        int sypOffset = offset.getY() % GameScreenSettings.getGameTileSize();
         
-        for (int x = sx; x < mx; x++) {
-            for (int y = sy; y < my; y++) {
-                AbstractBlock block = getBlock(x, y);
+        for (int xt = sxt; xt < mxt; xt++) {
+            for (int yt = syt; yt < myt; yt++) {
+                AbstractBlock block = getBlock(xt, yt);
                 
-                int exOffset = x == mx - 1 ? offset.getX() % GameScreenSettings.getGameTileSize() : 0;
-                int eyOffset = y == my - 1 ? offset.getY() % GameScreenSettings.getGameTileSize() : 0;
+//                int expOffset = x == mxt - 1 ? offset.getX() % GameScreenSettings.getGameTileSize() : 0;
+//                int eypOffset = y == myt - 1 ? offset.getY() % GameScreenSettings.getGameTileSize() : 0;
                 
-                GameWindowManager.instance.getWindow().getGameScreen().copy(sxOffset + x * block.getWidth(), syOffset + y * block.getWidth(), block.getPixels(), block.getWidth() - exOffset);
+//                GameWindowManager.instance.getWindow().getGameScreen().copy(sxpOffset + x * block.getWidth(), sypOffset + y * block.getWidth(), block.getPixels(), block.getWidth() - expOffset);
+
+                GameWindowManager.instance.getWindow().getGameScreen().copy((xt - sxt) * block.getWidth(), (yt - syt) * block.getWidth(), block.getPixels(), GameScreenSettings.getGameTileSize());
             }
         }        
     }
     
     public AbstractBlock getBlock (int x, int y) {
-        if (x < environment.size()) {
-            if (y < environment.get(x).size()) {
+        if (x >= 0 && x < environment.size()) {
+            if (y >= 0 && y < environment.get(x).size()) {
                 return environment.get(x).get(y);
             } else {
                 return new VoidBlock();
@@ -71,19 +73,19 @@ public abstract class AbstractGameLevel implements IGameScene, IUpdatable, IRend
         int speed = 1;
         
         if (GameInputManager.instance.isPressed(KeyEvent.VK_UP)) {
-            if (offset.getY() - speed > 0) offset.up(speed);
+            offset.down(speed);
         }
         
         if (GameInputManager.instance.isPressed(KeyEvent.VK_DOWN)) {
-            if (offset.getY() + speed < height) offset.down(speed);
+            offset.up(speed);
         }
         
         if (GameInputManager.instance.isPressed(KeyEvent.VK_LEFT)) {
-            if (offset.getX() - speed > 0) offset.left(speed);
+            offset.right(speed);
         }
         
         if (GameInputManager.instance.isPressed(KeyEvent.VK_RIGHT)) {
-            if (offset.getX() - speed < height) offset.right(speed);
+            offset.left(speed);
         }
                 
     }

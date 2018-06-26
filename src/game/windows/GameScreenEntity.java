@@ -39,12 +39,14 @@ public class GameScreenEntity {
         return pixels;
     }
     
-    public void copy (int x, int y, int[] pixels, int width) {
+    public void copy (int x, int y, int[] pixels, int xOffset, int yOffset, int width) {
+        int partialWidth = width - xOffset;
+        
         for (int i = 0; i < pixels.length; i++) {
-            int cx = x + i % width;
-            int cy = y + i / width;
+            int screenxp = x + i % width;
+            int screenyp = y + i / width;
             
-            setPixel(cx, cy, pixels[i]);   
+            setPixel(screenxp, screenyp, pixels[i]);   
         }
     }
         
