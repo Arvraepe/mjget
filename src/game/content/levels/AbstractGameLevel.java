@@ -6,10 +6,12 @@
 package game.content.levels;
 
 import game.content.map.blocks.AbstractBlock;
+import game.content.map.blocks.VoidBlock;
 import game.helpers.GamePoint;
 import game.helpers.IRenderable;
 import game.helpers.IUpdatable;
 import game.input.GameInputManager;
+import game.windows.GameScreenSettings;
 import game.windows.GameWindowManager;
 import game.windows.IGameScene;
 import java.awt.event.KeyEvent;
@@ -27,13 +29,38 @@ public abstract class AbstractGameLevel implements IGameScene, IUpdatable, IRend
     
     @Override
     public void render () {       
-        for (int x = 0; x < environment.size(); x++) {
-            for (int y = 0; y < environment.get(x).size(); y++) {
-                AbstractBlock block = environment.get(x).get(y);
+        
+        int sx = offset.getX() / GameScreenSettings.getGameTileSize();
+        int sy = offset.getY() / GameScreenSettings.getGameTileSize();
+        
+        int mx = sx + GameWindowManager.instance.getWindow().getSize().width / GameScreenSettings.getGameTileSize();
+        int my = sy + GameWindowManager.instance.getWindow().getSize().height / GameScreenSettings.getGameTileSize();
+        
+        int sxOffset = offset.getX() % GameScreenSettings.getGameTileSize();
+        int syOffset = offset.getY() % GameScreenSettings.getGameTileSize();
+        
+        for (int x = sx; x < mx; x++) {
+            for (int y = sy; y < my; y++) {
+                AbstractBlock block = getBlock(x, y);
                 
-                GameWindowManager.instance.getWindow().getGameScreen().copy(offset.getX() + x * block.getWidth(), offset.getY() + y * block.getWidth(), block.getPixels(), block.getWidth());
+                int exOffset = x == mx - 1 ? offset.getX() % GameScreenSettings.getGameTileSize() : 0;
+                int eyOffset = y == my - 1 ? offset.getY() % GameScreenSettings.getGameTileSize() : 0;
+                
+                GameWindowManager.instance.getWindow().getGameScreen().copy(sxOffset + x * block.getWidth(), syOffset + y * block.getWidth(), block.getPixels(), block.getWidth() - exOffset);
             }
         }        
+    }
+    
+    public AbstractBlock getBlock (int x, int y) {
+        if (x < environment.size()) {
+            if (y < environment.get(x).size()) {
+                return environment.get(x).get(y);
+            } else {
+                return new VoidBlock();
+            }
+        }
+        
+        return new VoidBlock();        
     }
     
     @Override

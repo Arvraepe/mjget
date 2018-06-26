@@ -12,12 +12,12 @@ import game.windows.GameScreenSettings;
  *
  * @author arvraepe
  */
-public class StoneBlock extends AbstractBlock {
+public class VoidBlock extends AbstractBlock {
     
-    public StoneBlock () {
+    public VoidBlock() {
         super(GameScreenSettings.getGameTileSize());
         
-        fill(GameColor.argb("#333333"));
+        fill(GameColor.argb("#111111"));
     }
     
 }

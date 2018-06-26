@@ -34,6 +34,8 @@ public class Dungeon extends AbstractGameLevel {
         }   
         
         this.environment.get(10).set(30, new FloorBlock());
+        this.environment.get(0).set(0, new FloorBlock());
+        this.environment.get(0).set(1, new FloorBlock());
     }
     
 }

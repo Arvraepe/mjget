@@ -5,13 +5,10 @@
  */
 package game.windows;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import javax.swing.JFrame;
 
 /**
@@ -32,12 +29,12 @@ public class GameWindow extends JFrame {
     }
     
     private void initialize () {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);         
-        getContentPane().setBackground(Color.BLACK);                   
-                
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                        
+        
+        setExtendedState(JFrame.MAXIMIZED_BOTH);    
+        setResizable(false);
         setUndecorated(true);  
-        setVisible(true);
+        setVisible(true);        
         
         hideCursor();
         
@@ -52,7 +49,7 @@ public class GameWindow extends JFrame {
         setCursor(getToolkit().createCustomCursor(new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB ), new Point(), null ));
     }
     
-    public void showCursor (BufferedImage cursor) {
+    public void showCursor (BufferedImage cursor) {        
         showCursor(cursor, new Point(this.getSize().width / 2, this.getSize().height / 2));
     }
     
@@ -60,7 +57,7 @@ public class GameWindow extends JFrame {
         setCursor(getToolkit().createCustomCursor(cursor, coordinates, null ));
     }
     
-    private void createGameScreen() {        
+    private void createGameScreen() {                
         this.screen = new GameScreen(this.getSize().width, this.getSize().height);
     }
     
