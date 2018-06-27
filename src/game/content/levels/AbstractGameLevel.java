@@ -14,6 +14,7 @@ import game.input.GameInputManager;
 import game.windows.GameScreenSettings;
 import game.windows.GameWindowManager;
 import game.windows.IGameScene;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -42,13 +43,32 @@ public abstract class AbstractGameLevel implements IGameScene, IUpdatable, IRend
         for (int xt = sxt; xt < mxt; xt++) {
             for (int yt = syt; yt < myt; yt++) {
                 AbstractBlock block = getBlock(xt, yt);
-                
-//                int expOffset = x == mxt - 1 ? offset.getX() % GameScreenSettings.getGameTileSize() : 0;
-//                int eypOffset = y == myt - 1 ? offset.getY() % GameScreenSettings.getGameTileSize() : 0;
-                
-//                GameWindowManager.instance.getWindow().getGameScreen().copy(sxpOffset + x * block.getWidth(), sypOffset + y * block.getWidth(), block.getPixels(), block.getWidth() - expOffset);
 
-                GameWindowManager.instance.getWindow().getGameScreen().copy((xt - sxt) * block.getWidth(), (yt - syt) * block.getWidth(), block.getPixels(), GameScreenSettings.getGameTileSize());
+                Point bsOffset = new Point(0, 0);
+                Point beOffset = new Point(block.getWidth(), block.getHeight());
+                
+                if (xt == sxt) {
+                    // block in the first column
+                    bsOffset.x = sxpOffset;
+                }                               
+                
+                if (xt == mxt - 1) {
+                    // block in the last column
+                    beOffset.x = block.getWidth() - sxpOffset;
+                }
+                
+                if (yt == syt) {
+                    // block the first row
+                    bsOffset.y = sypOffset;
+                }
+                
+                if (yt == myt - 1) {
+                    // block the last row
+                    bsOffset.y = block.getHeight() - sypOffset;
+                }
+                                
+                GameWindowManager.instance.getWindow().getGameScreen().copy(sxpOffset + xt * block.getWidth(), sypOffset + yt * block.getWidth(), block.getPixels(), block.getWidth(), bsOffset, beOffset);
+                
             }
         }        
     }

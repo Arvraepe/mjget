@@ -5,6 +5,8 @@
  */
 package game.windows;
 
+import java.awt.Point;
+
 /**
  *
  * @author arvraepe
@@ -39,14 +41,22 @@ public class GameScreenEntity {
         return pixels;
     }
     
-    public void copy (int x, int y, int[] pixels, int xOffset, int yOffset, int width) {
-        int partialWidth = width - xOffset;
-        
+    public void copy (int x, int y, int[] pixels, int width, Point sOffset, Point eOffset) {
+                
         for (int i = 0; i < pixels.length; i++) {
-            int screenxp = x + i % width;
-            int screenyp = y + i / width;
+                        
+            if (
+                    i / width >= sOffset.y && i % width >= sOffset.x &&
+                    i / width < eOffset.y && i % width < eOffset.x  
+                    
+                ) {
+                
+                int screenxp = x + i % width - sOffset.x;
+                int screenyp = y + i / width - sOffset.y;
             
-            setPixel(screenxp, screenyp, pixels[i]);   
+                setPixel(screenxp, screenyp, pixels[i]);   
+                
+            }                        
         }
     }
         
